@@ -34,7 +34,8 @@ jobs:
     - name: Build Binary
       run: make buildx
     
-    - uses: "marvinpinto/action-automatic-releases@v1.2.1"
+    # - uses: "marvinpinto/action-automatic-releases@v1.2.1"
+    - uses: "lautitoti/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
