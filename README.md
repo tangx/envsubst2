@@ -11,7 +11,7 @@ Flags:
       --force-update    replace the placeholder, even if the environment value is empty (default true)
   -h, --help            help for envsubst2
       --input string    input file
-      --output string   output file
+      --output string   output file, os.Stdout if empty.
 ```
 
 
