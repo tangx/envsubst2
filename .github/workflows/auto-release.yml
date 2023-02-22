@@ -24,19 +24,22 @@ jobs:
     - name: show Go verion
       run: go version
 
-    # - name: Get dependencies
-    #   run: |
-    #     go get -v -t -d ./...
-    #     if [ -f Gopkg.toml ]; then
-    #         curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-    #         dep ensure
-    #     fi
+    - name: Get dependencies
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
 
-    # - name: Show Environment Variables
-    #   run: env
+    - name: Show Environment Variables
+      run: env
 
     - name: Build Binary
       run: make buildx
+
+    - name: Show build result
+      run: pwd; ls -al out/*
     
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
