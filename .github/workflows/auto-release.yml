@@ -2,45 +2,42 @@ name: Go
 
 on:
   push:
-    tags:
+    tags: 
       - "v*"
 
 jobs:
+
   build:
     name: Build Binary
     runs-on: macos-latest
     steps:
-      - name: Set up Go 1.19
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.19
-        id: go
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+    - name: Set up Go 1.17
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.17
+      id: go
 
-      - name: Get dependencies
-        run: |
-          go get -v -t -d ./...
-          if [ -f Gopkg.toml ]; then
-              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-              dep ensure
-          fi
-      - name: Show Environment Variables
-        run: env
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
 
-      - name: Build Binary
-        run: make buildx
+    # - name: Get dependencies
+    #   run: |
+    #     go get -v -t -d ./...
+    #     if [ -f Gopkg.toml ]; then
+    #         curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+    #         dep ensure
+    #     fi
 
-      # - uses: "marvinpinto/action-automatic-releases@v1.2.1"
-      #   with:
-      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      #     prerelease: false
-      #     files: |
-      #       out/*
+    # - name: Show Environment Variables
+    #   run: env
 
-      - uses: "ncipollo/release-action@v1"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          artifacts: "out/*"
-
+    - name: Build Binary
+      run: make buildx
+    
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        files: |
+          out/*
