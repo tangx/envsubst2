@@ -1,4 +1,6 @@
-# envsubst2
+# envsubst2 
+
+一个比 envsubst 更省心的配置渲染工具
 
 ## `envsubst2` 的使用方式
 
