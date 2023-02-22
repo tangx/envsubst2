@@ -8,11 +8,12 @@ import (
 	"io"
 	"os"
 	"regexp"
+	"strings"
 )
 
 type Flag struct {
 	Input       string `flag:"input" usage:"input file"`
-	Output      string `flag:"output" usage:"output file"`
+	Output      string `flag:"output" usage:"output file, os.Stdout if empty."`
 	ForceUpdate bool   `flag:"force-update" usage:"replace the placeholder, even if the environment value is empty"`
 }
 
@@ -27,10 +28,7 @@ func Replace(ctx context.Context, flag *Flag) {
 	defer in.Close()
 
 	// open output file
-	out, err := os.OpenFile(flag.Output, os.O_CREATE|os.O_TRUNC|os.O_RDWR, os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
+	out := outWriter(flag.Output)
 	defer out.Close()
 
 	// readlines
@@ -44,7 +42,7 @@ func Replace(ctx context.Context, flag *Flag) {
 		matches := patt.FindAll(line, -1)
 		for i := range matches {
 			key := string(matches[i]) // key=${PORT}
-			val := value(key)
+			val, exist := value(key)
 
 			// force update
 			if flag.ForceUpdate {
@@ -52,7 +50,8 @@ func Replace(ctx context.Context, flag *Flag) {
 				continue
 			}
 
-			if val != "" {
+			// replace if the variable is set. regardless of the value is empty or not.
+			if exist {
 				line = bytes.ReplaceAll(line, []byte(key), []byte(val))
 			}
 		}
@@ -62,6 +61,22 @@ func Replace(ctx context.Context, flag *Flag) {
 	}
 }
 
-func value(key string) string {
-	return os.ExpandEnv(key)
+func value(key string) (string, bool) {
+	key = strings.Trim(key, "${}")
+
+	val, exist := os.LookupEnv(key)
+
+	return val, exist
+}
+
+func outWriter(filename string) io.WriteCloser {
+	if filename == "" {
+		return os.Stdout
+	}
+
+	out, err := os.OpenFile(filename, os.O_CREATE|os.O_TRUNC|os.O_RDWR, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+	return out
 }

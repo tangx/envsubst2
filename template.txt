@@ -1,0 +1,7 @@
+
+My home path is ${HOME}.
+My user is ${USER}.
+
+This variables doesn't exist: ${DONT_EXIST}
+This variables is empty: ${EMPTY}
+
