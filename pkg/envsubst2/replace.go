@@ -12,9 +12,9 @@ import (
 )
 
 type Flag struct {
-	Input       string `flag:"input" usage:"input file"`
-	Output      string `flag:"output" usage:"output file, os.Stdout if empty."`
-	ForceUpdate bool   `flag:"force-update" usage:"replace the placeholder, even if the environment value is empty"`
+	Input        string `flag:"input" usage:"input file"`
+	Output       string `flag:"output" usage:"output file, os.Stdout if empty."`
+	ForceReplace bool   `flag:"force-replace" usage:"replace all the placeholders, even if their value is empty"`
 }
 
 var patt = regexp.MustCompile(`\${([a-z0-9A-Z_]+)}`)
@@ -45,7 +45,7 @@ func Replace(ctx context.Context, flag *Flag) {
 			val, exist := value(key)
 
 			// force update
-			if flag.ForceUpdate {
+			if flag.ForceReplace {
 				line = bytes.ReplaceAll(line, []byte(key), []byte(val))
 				continue
 			}

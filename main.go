@@ -32,7 +32,7 @@ var root = &cobra.Command{
 	},
 }
 var flag = &envsubst2.Flag{
-	ForceUpdate: true,
+	ForceReplace: true,
 }
 
 func init() {
