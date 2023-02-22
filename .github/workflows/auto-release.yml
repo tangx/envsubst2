@@ -8,6 +8,8 @@ on:
 jobs:
 
   build:
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions: write-all
     name: Build Binary
     runs-on: macos-latest
     steps:
