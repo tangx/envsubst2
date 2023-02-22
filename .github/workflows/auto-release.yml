@@ -15,6 +15,12 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v3
 
+    # https://github.blog/changelog/2022-09-22-github-actions-all-actions-will-begin-running-on-node16-instead-of-node12/
+    - name: set node 16
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        
     - name: Set up Go 1.19
       uses: actions/setup-go@v3
       with:
@@ -24,13 +30,13 @@ jobs:
     - name: show Go verion
       run: go version
 
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+    # - name: Get dependencies
+    #   run: |
+    #     go get -v -t -d ./...
+    #     if [ -f Gopkg.toml ]; then
+    #         curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+    #         dep ensure
+    #     fi
 
     - name: Show Environment Variables
       run: env
