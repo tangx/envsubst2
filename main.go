@@ -28,6 +28,7 @@ var root = &cobra.Command{
 	Long: fmt.Sprintf(tip, version.Version),
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.Background()
+		envsubst2.InitDefaultValues(flag)
 		envsubst2.Replace(ctx, flag)
 	},
 }

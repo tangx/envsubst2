@@ -12,9 +12,10 @@ import (
 )
 
 type Flag struct {
-	Input        string `flag:"input" usage:"input file"`
-	Output       string `flag:"output" usage:"output file, os.Stdout if empty."`
-	ForceReplace bool   `flag:"force-replace" usage:"replace all the placeholders, even if their value is empty"`
+	Input             string `flag:"input" usage:"input file"`
+	Output            string `flag:"output" usage:"output file, os.Stdout if empty."`
+	ForceReplace      bool   `flag:"force-replace" usage:"replace all the placeholders, even if their value is empty"`
+	DefaultValuesFile string `flag:"default-values-file" usage:"specify the default values in YAML"`
 }
 
 var patt = regexp.MustCompile(`\${([a-z0-9A-Z_]+)}`)
@@ -65,6 +66,10 @@ func value(key string) (string, bool) {
 	key = strings.Trim(key, "${}")
 
 	val, exist := os.LookupEnv(key)
+
+	if !exist {
+		val, exist = getDefaultValue(key)
+	}
 
 	return val, exist
 }
