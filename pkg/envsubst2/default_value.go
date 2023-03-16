@@ -24,7 +24,7 @@ func InitDefaultValues(flag *Flag) error {
 		return fmt.Errorf("unmarshal default values file failed: %w", err)
 	}
 
-	fmt.Println(defaultValues)
+	// fmt.Println(defaultValues)
 
 	return nil
 }
